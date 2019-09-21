@@ -17,11 +17,10 @@ const checkResolvable = ary=> {
   const space = ary.findIndex(item => item.number === 16)
   /** 16 的列（X軸位置） */
   const spaceX = initMultiArrays(space)[0] % 2
+  // splice 會動到原本的陣列，所以這裡解構出一個陣列來操作
+  const newAry = [...ary].splice(space, 1)
   /** 逆序列數 */
   let count = 0
-  // splice 會動到原本的陣列，所以這裡解構出一個陣列來操作
-  let newAry = [...ary]
-  newAry.splice(space, 1)
   count = countComputed(newAry)
   return count % 2 + spaceX % 2 === 0
 }
@@ -77,9 +76,9 @@ const MOVE_EMPTY = (state, { index }) => {
 }
 
 /** 更新計步器 */
-const UPDATE_MOVE = (state, action) => {
+const UPDATE_MOVE = (state, { update }) => {
   let { move } = state
-  move += 1
+  update? move += 1 : move = 0
   return { ...state, move }
 }
 

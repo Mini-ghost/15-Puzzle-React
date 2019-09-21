@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import styled from 'styled-components'
 
 import { connect } from 'react-redux'
-import { INIT_PUZZLE, TOGGLE_PLAY, SET_COMPLETE } from './action'
+import { INIT_PUZZLE, TOGGLE_PLAY, SET_COMPLETE, UPDATE_MOVE } from './action'
 
 // components
 import PuzzleItem from './components/PuzzleItem'
 import PuzzleCover from './components/PuzzleCover'
 
-const sec = 5
+const sec = 0.5
 /** 外層容器 */
 const Content = styled.div`
   font-family: "Shadows Into Light", "Avenir", Helvetica, Arial, sans-serif;
@@ -18,7 +18,6 @@ const Content = styled.div`
   color: #61dafb;
   margin-top: 60px;
   user-select: none;
-
 `
 const Title = styled.h1`
   font-size: 40px;
@@ -40,6 +39,10 @@ const Puzzle = styled.div`
   overflow: hidden;
   transition: ${sec}s;
   background-color: #1f2229;
+  @media (max-width: 667px) {
+    width: 320px;
+    height: 320px
+  }
 `
 
 const PuzzleContent = styled.div`
@@ -58,6 +61,10 @@ const PuzzleGroup = styled.div`
   display: flex;
   flex-wrap: wrap;
   font-size: 2.125rem;
+  @media (max-width: 667px) {
+    width: calc(100% - 6px);
+    height: calc(100% - 6px)
+  }
 `
 const Reset = styled.div` 
 `
@@ -83,15 +90,19 @@ const mapDispatchToProps = dispatch => {
     },
     setComplete: (type) => {
       dispatch(SET_COMPLETE(type))
-    }
+    },
+		updateMove: (update) => {
+			dispatch(UPDATE_MOVE(update))
+		}
   }
 }
 
 class App extends Component {
 
-  startPuzzle = () => {
-    this.props.initPuzzle();
-    this.props.togglePlay()
+  state = { width: 0 }
+
+  get itemWidth() {
+    return this.state.width > 667? 120 : 77
   }
 
   componentDidUpdate(prevProps) {
@@ -99,14 +110,38 @@ class App extends Component {
     const complete = puzzle.every(item => item.position.join('') === item.value.join(''))
     if (complete && play) {
       this.props.setComplete(complete)
-      setTimeout(() => {
-        this.props.togglePlay()
-      }, 1000);
+      setTimeout(() => { this.props.togglePlay() }, 1000);
     }
+  }
+
+  componentDidMount() {
+    this.getWindowWidth()
+    window.addEventListener('resize', this.getWindowWidth)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.getWindowWidth)
+  }
+
+  getWindowWidth = () => {
+    this.setState(() => ({ width: window.innerWidth }))
+  }
+
+  /** 開始遊戲 */ 
+  handleStart = () => {
+    this.props.initPuzzle();
+    this.props.togglePlay()
+  }
+
+  /** 重新開始 */
+  handleReset = () => {
+    this.props.initPuzzle();
+    this.props.updateMove(false)
   }
 
   render() {
     const { puzzle, complete, move, play } = this.props
+    const { itemWidth } = this
     return (
       <Content>
         <Title> 15 puzzle </Title>
@@ -114,12 +149,17 @@ class App extends Component {
         <Puzzle>
           <PuzzleContent>
             {
-              !play && <PuzzleCover playToggle={ this.startPuzzle } complete={ complete }/>
+              !play && <PuzzleCover playToggle={ this.handleStart } complete={ complete }/>
             }
             <PuzzleGroup>
               {
                 puzzle.map((item, index) => (
-                  <PuzzleItem item={item} index={index} key={item.number}/>
+                  <PuzzleItem
+                    item={item}
+                    index={index}
+                    itemWidth={itemWidth}
+                    key={item.number}
+                  />
                 ))
               }
             </PuzzleGroup>
@@ -127,7 +167,7 @@ class App extends Component {
         </Puzzle>
         {
           play && <Reset>
-            <ResetItem onClick={() => this.props.initPuzzle()}>reset</ResetItem>
+            <ResetItem onClick={() => this.handleReset()}>reset</ResetItem>
           </Reset>
         }
       </Content>

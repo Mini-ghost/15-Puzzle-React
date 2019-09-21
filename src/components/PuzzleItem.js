@@ -10,6 +10,9 @@ const Item = styled.div`
 	padding: 10px;
 	position: absolute;
 	transition: .5s;
+	@media (max-width: 667px) {
+		padding: 6px
+	}
 `
 
 const ItemContent = styled.div`
@@ -28,6 +31,9 @@ const ItemContent = styled.div`
 	&:hover {
 		background-color: #252a37
 	}
+	@media (max-width: 667px)  {
+		font-size: 28px;
+	}
 `
 
 const mapStateToProps = state => {
@@ -40,8 +46,8 @@ const mapDispatchToProps = dispatch => {
 		moveEmpty: index => {
 			dispatch(MOVE_EMPTY(index))
 		},
-		updateMove: () => {
-			dispatch(UPDATE_MOVE())
+		updateMove: (num) => {
+			dispatch(UPDATE_MOVE(num))
 		}
 	}
 }
@@ -61,16 +67,17 @@ class PuzzleItem extends Component {
 			/** 改變點選物件座標 */
 			this.props.moveEmpty(index)
 			/** 更新計步器 */
-			this.props.updateMove()
+			this.props.updateMove(true)
 		}
 	}
 
 	render() {
 		const { number, position } = this.props.item
+		const { itemWidth } = this.props
 		/** 物件 style */
 		const styleObject = {
-			top: `${position[1] * 120}px`,
-			left: `${position[0] * 120}px`
+			top: `${position[1] * itemWidth}px`,
+			left: `${position[0] * itemWidth}px`
 		}
 		return(
 			<Item style={ styleObject }>

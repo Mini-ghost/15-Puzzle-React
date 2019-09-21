@@ -14,9 +14,10 @@ const MOVE_EMPTY = index => {
   }
 }
 
-const UPDATE_MOVE = () => {
+const UPDATE_MOVE = (update) => {
   return {
-    type: 'UPDATE_MOVE'
+    type: 'UPDATE_MOVE',
+    update
   }
 }
 
