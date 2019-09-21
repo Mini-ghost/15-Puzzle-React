@@ -10,7 +10,9 @@ const Title = styled.h2`
 `
 
 const Depiction = styled.p`
-font-size: 18px;
+font-size: 16px;
+margin-top: 8px;
+margin-botton: 8px
 color: rgb(255, 229, 100);
 letter-spacing: 1.5px
 `

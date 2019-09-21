@@ -21,10 +21,14 @@ const Content = styled.div`
 `
 const Title = styled.h1`
   font-size: 40px;
+  margin-top: 20px;
+  margin-botton: 20px
 `
 const Moves = styled.p`
   font-weight: bold;
   font-size: 24px;
+  margin-top: 12px;
+  margin-botton: 12px
 
 `
 const Puzzle = styled.div`
