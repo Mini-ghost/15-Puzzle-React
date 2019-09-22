@@ -16,7 +16,7 @@ const checkResolvable = ary=> {
   /** 16 的序號 */
   const space = ary.findIndex(item => item.number === 16)
   /** 16 的列（X軸位置） */
-  const spaceX = initMultiArrays(space)[0] % 2
+  const spaceX = initMultiArrays(space)[0]
   // splice 會動到原本的陣列，所以這裡解構出一個陣列來操作
   const newAry = [...ary].splice(space, 1)
   /** 逆序列數 */

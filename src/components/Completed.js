@@ -6,15 +6,16 @@ const Content = styled.div`
 `
 const Title = styled.h2`
   font-size: 36px;
+  margin-top: 18px;
+  margin-botton: 18px;
   color: #ffe564;
 `
 
 const Depiction = styled.p`
 font-size: 16px;
 margin-top: 8px;
-margin-botton: 8px
+margin-botton: 8px;
 color: rgb(255, 229, 100);
-letter-spacing: 1.5px
 `
 
 export default function Completed() {
