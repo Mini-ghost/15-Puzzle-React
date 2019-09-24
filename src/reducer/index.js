@@ -20,8 +20,7 @@ const checkResolvable = ary=> {
   // splice 會動到原本的陣列，所以這裡解構出一個陣列來操作
   const newAry = [...ary].splice(space, 1)
   /** 逆序列數 */
-  let count = 0
-  count = countComputed(newAry)
+  const count = countComputed(newAry)
   return count % 2 + spaceX % 2 === 0
 }
 /** 逆序列累加 */

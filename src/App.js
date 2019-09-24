@@ -134,16 +134,16 @@ class App extends Component {
     this.setState(() => ({ width: window.innerWidth }))
   }
 
-  /** 開始遊戲 */ 
-  handleStart = () => {
-    this.props.initPuzzle();
-    this.props.togglePlay()
-  }
-
   /** 重新開始 */
   handleReset = () => {
     this.props.initPuzzle();
     this.props.updateMove(false)
+  }
+
+  /** 開始遊戲 */ 
+  handleStart = () => {
+    this.props.togglePlay()
+    this.handleReset()
   }
 
   render() {
