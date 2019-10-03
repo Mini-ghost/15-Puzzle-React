@@ -1,3 +1,8 @@
+/** 數字轉座標 */
+const initMultiArrays = num => {
+  return [ num % 4, Math.floor(num / 4) ]
+}
+/** 初始化拼圖資料 */
 const initPuzzle = num => {
   const sum = num * num
   const puzzle = []
@@ -7,18 +12,17 @@ const initPuzzle = num => {
   }
   return puzzle
 }
- /** 數字轉座標 */
-const initMultiArrays = num => {
-  return [ num % 4, Math.floor(num / 4) ]
-}
 /** 比對資料是否有解答 */
 const checkResolvable = ary=> {
   /** 16 的序號 */
   const space = ary.findIndex(item => item.number === 16)
   /** 16 的列（X軸位置） */
-  const spaceX = initMultiArrays(space)[0]
+  const spaceX = initMultiArrays(space)[0] + 1
   // splice 會動到原本的陣列，所以這裡解構出一個陣列來操作
-  const newAry = [...ary].splice(space, 1)
+  const newAry = (ary => {
+    ary.splice(space, 1)
+    return ary
+  })([...ary])
   /** 逆序列數 */
   const count = countComputed(newAry)
   return count % 2 + spaceX % 2 === 0
@@ -49,15 +53,14 @@ const INIT_PUZZLE = (state, { num }) => {
     puzzle.sort(() => (Math.random() > 0.5 ? 1 : -1))
     resolvable = checkResolvable(puzzle)
   }
+  /** 排組亂數後賦予定位 */
+  puzzle.forEach((item, index) => {
+    item.position = initMultiArrays(index)
+  })
   /** 設定空格資料 */
   emptyIndex = puzzle.findIndex(item => item.number === 16)
   emptyArray = initMultiArrays(emptyIndex)
-  /** 排組亂數後賦予定位 */
   puzzle.splice(emptyIndex, 1)
-  puzzle.forEach((item, index) => {
-    let id = index < emptyIndex ? index : index + 1
-    item.position = initMultiArrays(id)
-  })
 
   return { ...state, puzzle, emptyArray }
 }
