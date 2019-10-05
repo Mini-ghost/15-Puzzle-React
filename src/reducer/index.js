@@ -25,7 +25,7 @@ const checkResolvable = ary=> {
   })([...ary])
   /** 逆序列數 */
   const count = countComputed(newAry)
-  return count % 2 + spaceX % 2 === 0
+  return count % 2 + spaceX % 2 === 1
 }
 /** 逆序列累加 */
 const countComputed = ary => {
